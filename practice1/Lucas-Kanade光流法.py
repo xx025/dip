@@ -4,7 +4,7 @@
 import cv2 as cv
 import numpy as np
 
-cap = cv.VideoCapture('../opencv-4.6.0/samples/data/vtest.avi')
+cap = cv.VideoCapture('../opencv-samples-data/vtest.avi')
 
 # ShiTomasi 角点检测的参数
 feature_params = dict(maxCorners=100,
