@@ -1,7 +1,7 @@
 # 来源： https://opencv.apachecn.org/#/docs/4.0.0/6.3-tutorial_py_bg_subtraction?id=backgroundsubtractormog2
 import cv2 as cv
 
-cap = cv.VideoCapture('../opencv-4.6.0/samples/data/vtest.avi')
+cap = cv.VideoCapture('../opencv-samples-data/vtest.avi')
 
 fgbg = cv.createBackgroundSubtractorMOG2()
 
