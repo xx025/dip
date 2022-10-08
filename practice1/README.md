@@ -9,6 +9,10 @@
 实现方法：
 
 ```python
+
+
+import matplotlib
+
 def zft(img, draw=False):
     """
     直方图数据计算 和绘制直方图
@@ -33,19 +37,19 @@ def zft(img, draw=False):
 测试：
 
 ```python
-    def test_f1(self):
-        """
-        灰度图像的直方图计算和显示
-        :return:
-        """
-        import cv2
-        from practice1.pic_ import IMGU
+def test_f1(self):
+    """
+    灰度图像的直方图计算和显示
+    :return:
+    """
+    import cv2
+    from practice1.pic_ import IMGU
 
-        img = cv2.imread('../opencv-samples-data/left01.jpg', cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread('../opencv-samples-data/left01.jpg', cv2.IMREAD_GRAYSCALE)
 
-        IMGU.zft(img, draw=True)
-        cv2.imshow('img', img)
-        cv2.waitKey()
+    IMGU.zft(img, draw=True)
+    cv2.imshow('img', img)
+    cv2.waitKey()
 ```
 
 原图：
@@ -62,6 +66,7 @@ def zft(img, draw=False):
 实现方法：
 
 ```python
+import numpy as np
 def covert_to_16(img):
     # 除以15进行四舍五入 取整
     for i in range(len(img)):
@@ -73,15 +78,15 @@ def covert_to_16(img):
 测试：
 
 ```python
-    def test_f2(self):
-        # 灰度图像的负像，
-        import cv2
-        from practice1.pic_ import IMGU
+def test_f2(self):
+    # 灰度图像的负像，
+    import cv2
+    from practice1.pic_ import IMGU
 
-        img = cv2.imread('../opencv-samples-data/left01.jpg', cv2.IMREAD_GRAYSCALE)
-        a4 = IMGU.fx(img)
-        cv2.imshow('res', a4)
-        cv2.waitKey()
+    img = cv2.imread('../opencv-samples-data/left01.jpg', cv2.IMREAD_GRAYSCALE)
+    a4 = IMGU.fx(img)
+    cv2.imshow('res', a4)
+    cv2.waitKey()
 ```
 
 负相图：
@@ -92,6 +97,8 @@ def covert_to_16(img):
 实现方法
 
 ```python
+import numpy as np
+
 def covert_to_16(img):
     # 除以15进行四舍五入 取整
     for i in range(len(img)):
@@ -103,6 +110,8 @@ def covert_to_16(img):
 测试
 
 ```python
+import cv2
+from practice1.pic_ import IMGU
 def test_f3(self):
     # 灰度级转换
     img = cv2.imread('../practice1/imgs/img21.png', cv2.IMREAD_GRAYSCALE)
@@ -122,29 +131,33 @@ def test_f3(self):
 实现方法：
 
 ```python
-    def noise(img, sigma=5, N=10):
-        import random
-        """
-        :param img: 原始图像，
-        :param sigma: 随机数范围，可理解为强度
-        :param N: 产生数据量（图片张数）
-        :return: 多张施加噪声后的数据列表
-        """
-        mu = 0  # 均值0
-        re = []
-        for _s in range(N):
-            _img = copy(img)
-            for i in range(len(img)):
-                for j in range(len(img[0])):
-                    img[i][j] += random.gauss(mu, sigma)
-            re.append(_img)
-        return re
+from copy import copy
+
+def noise(img, sigma=5, N=10):
+    import random
+    """
+    :param img: 原始图像，
+    :param sigma: 随机数范围，可理解为强度
+    :param N: 产生数据量（图片张数）
+    :return: 多张施加噪声后的数据列表
+    """
+    mu = 0  # 均值0
+    re = []
+    for _s in range(N):
+        _img = copy(img)
+        for i in range(len(img)):
+            for j in range(len(img[0])):
+                img[i][j] += random.gauss(mu, sigma)
+        re.append(_img)
+    return re
 
 ```
 
 测试：
 
 ```python
+from practice1.pic_ import IMGU
+import cv2
 def test_f4(self):
     # 生成噪声图
     img = cv2.imread('../practice1/imgs/img21.png', cv2.IMREAD_GRAYSCALE)
@@ -162,36 +175,40 @@ def test_f4(self):
 实现方法：
 
 ```python
-    def mean(imgs):
-        """
-        :param imgs: 带有噪声的图像集合
-        :return: 均值后的图像
-        """
-        q = np.array(imgs[0], dtype=int)
-        # 取第一张图像进行加和
-        # 转换数据类型，防止溢出
+import numpy as np
 
-        for _i in range(1, len(imgs)):
-            for i in range(len(q)):
-                for j in range(len(q[0])):
-                    q[i][j] += imgs[_i][i][j]
-        q = q // len(imgs)
-        # 求均值（取整）
-        img1 = np.array(q, dtype='uint8')
-        # 重新转换成 uint8 灰度图像类型
-        return img1
+def mean(imgs):
+    """
+    :param imgs: 带有噪声的图像集合
+    :return: 均值后的图像
+    """
+    q = np.array(imgs[0], dtype=int)
+    # 取第一张图像进行加和
+    # 转换数据类型，防止溢出
+
+    for _i in range(1, len(imgs)):
+        for i in range(len(q)):
+            for j in range(len(q[0])):
+                q[i][j] += imgs[_i][i][j]
+    q = q // len(imgs)
+    # 求均值（取整）
+    img1 = np.array(q, dtype='uint8')
+    # 重新转换成 uint8 灰度图像类型
+    return img1
 ```
 
 测试：
 
 ```python
-    def test_f5(self):
-        # 图像相加去噪
-        img = cv2.imread('../practice1/imgs/img21.png', cv2.IMREAD_GRAYSCALE)
-        imgs = IMGU.noise(img, sigma=20)
-        img = IMGU.mean(imgs)
-        cv2.imshow('res', img)
-        cv2.waitKey()
+import cv2
+from practice1.pic_ import IMGU
+def test_f5(self):
+    # 图像相加去噪
+    img = cv2.imread('../practice1/imgs/img21.png', cv2.IMREAD_GRAYSCALE)
+    imgs = IMGU.noise(img, sigma=20)
+    img = IMGU.mean(imgs)
+    cv2.imshow('res', img)
+    cv2.waitKey()
 ```
 
 相加去噪后的图：
@@ -208,6 +225,7 @@ def test_f4(self):
 该方法也有优缺点，在负载的环境下，如运动缓慢，光照或者雨雪天气时，帧差法的检测效果并不是很好。另外，当运动物体一旦静止或者被物体遮挡时，帧差法及其改进算法容易丢失物体信息。此外，由于帧间差分法的前提是图像背景的不变性，如果背景运动，该方法就不合适了。对于这种情况，可先补偿由摄像机移动引起的背景的运动，之后再对图像进行差分的计算。我们可以用两种方法来消除背景的相对运动所构成的不良效果：一种是补偿闭环系统中的自反馈对得到的运动镜头参数；另一种是匹配背景图像中特征比较突出的区域，在背景偏移量得到之后再进行一定的弥补。与第一种方法相比较来说，第二种方法在本质上不依靠在跟踪算法中的回路参数，进一步来说，当背景图像中有显著的框架特征时可以有好的背景弥补效果被获取，并且配准精度较高。
 
 ```python
+import cv2
 class FrameDiff:
 
     def __init__(self, l1, l2):
@@ -268,31 +286,31 @@ class FrameDiff:
 测试代码：
 
 ```python
-    def test_frames_diff(self):
-        import cv2
+def test_frames_diff(self):
+    import cv2
 
-        """
-        测试帧差法
-        """
+    """
+    测试帧差法
+    """
 
-        from practice1.vio_ import Video
-        from practice1.vio_ import FrameDiff
+    from practice1.vio_ import Video
+    from practice1.vio_ import FrameDiff
 
-        vid = Video(path='../opencv-samples-data/vtest.avi')
+    vid = Video(path='../opencv-samples-data/vtest.avi')
 
-        print(len(vid.frames))
+    print(len(vid.frames))
 
-        l1 = vid.frames[106]
-        l2 = vid.frames[107]
+    l1 = vid.frames[106]
+    l2 = vid.frames[107]
 
-        op = FrameDiff(l1=l1, l2=l2)
+    op = FrameDiff(l1=l1, l2=l2)
 
-        lt = op.frame_diff()
-        rel = op.rec_angl(diff=lt)
+    lt = op.frame_diff()
+    rel = op.rec_angl(diff=lt)
 
-        cv2.imshow('diff', rel)
+    cv2.imshow('diff', rel)
 
-        cv2.waitKey()
+    cv2.waitKey()
 ```
 
 测试结果图：
@@ -301,6 +319,8 @@ class FrameDiff:
 class video :
 
 ```python
+import cv2
+        
 class Video:
 
     def __init__(self, path):
