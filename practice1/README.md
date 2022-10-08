@@ -269,6 +269,8 @@ class FrameDiff:
 
 ```python
     def test_frames_diff(self):
+        import cv2
+
         """
         测试帧差法
         """
@@ -276,7 +278,7 @@ class FrameDiff:
         from practice1.vio_ import Video
         from practice1.vio_ import FrameDiff
 
-        vid = Video(path='../practice1/video/Laboratory_raw.avi')
+        vid = Video(path='../opencv-samples-data/vtest.avi')
 
         print(len(vid.frames))
 
@@ -294,8 +296,7 @@ class FrameDiff:
 ```
 
 测试结果图：
-
-![image-20221008200153575](C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008200153575.png)
+![](imgs/帧差法效果图.png)
 
 class video :
 
@@ -353,7 +354,7 @@ cv.destroyAllWindows()
 
 效果图:
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008200949565.png" alt="image-20221008200949565" style="zoom:67%;" />
+![](imgs/背景拆分法效果图.png)
 
 
 
@@ -432,4 +433,5 @@ cap.release()
 
 效果图：
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008192223587.png" alt="image-20221008192223587" style="zoom:50%;" />
+
+![](imgs/光流法效果图.png)
