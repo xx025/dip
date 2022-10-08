@@ -7,7 +7,7 @@ class Video:
         self.video = cv2.VideoCapture(path)  # 视频对象
         self.frames = self.__all_frames()  # 所有帧
         self.height, self.width, self.RGB3 = self.frames[0].shape  # 高度和宽度
-        self.len = len(self.frames)  # 帧数
+        self.lens = len(self.frames)  # 帧数
 
     def __all_frames(self):
         frames = []
@@ -34,7 +34,6 @@ def frame_pre_op(ll):
 class FrameDiff:
 
     def __init__(self, l1, l2):
-        self.es = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 4))
         self.l1 = l1
         self.l2 = l2
 
@@ -53,7 +52,9 @@ class FrameDiff:
 
         diff = cv2.absdiff(l1, l2)
         diff = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)[1]  # 二值化阈值处理
-        diff = cv2.dilate(diff, self.es, iterations=2)  # 形态学膨胀
+
+        es = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 4))
+        diff = cv2.dilate(diff, es, iterations=2)  # 形态学膨胀
 
         # https://blog.csdn.net/drippingstone/article/details/116081434
         # code line: 33-36
@@ -89,13 +90,34 @@ class BackSub:
     背景拆分法
     """
 
-    def __init__(self):
+    def __init__(self, vid: Video):
+        """
+
+        :param vid: 一个Video 对象
+        """
+        self.width = vid.width
+        self.height = vid.height
+        self.frames = vid.frames
+        self.lens = vid.lens
         pass
 
     def build_back_ground(self):
         """
         构建一个背景，统计所有帧在像素点位置出现像素值的次数取众数在进行均值
 
-        :return:
+        注：特别耗时 F(t)=帧数*宽度*高度
+        :return: 一个背景图像
         """
-        pass
+        m_ = [[dict() for i in range(self.width)] for j in range(self.height)]
+
+        for _i in range(self.lens):
+            print(f"进度[{_i}/{self.lens}]")
+            for j in range(self.height):
+                for i in range(self.width):
+                    sg = frame_pre_op(self.frames[_i])
+                    ind = str(sg[j][i])
+                    if m_[j][i].get(ind):
+                        m_[j][i][ind] += 1
+                    else:
+                        m_[j][i][ind] = 1
+        return m_
