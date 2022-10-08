@@ -1,15 +1,13 @@
 import unittest
 
-import cv2
-
-from practice1.vio_ import BackSub
-
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
         self.assertEqual(True, False)  # add assertion here
 
     def test_frames_diff(self):
+        import cv2
+
         """
         测试帧差法
         """
@@ -17,7 +15,7 @@ class MyTestCase(unittest.TestCase):
         from practice1.vio_ import Video
         from practice1.vio_ import FrameDiff
 
-        vid = Video(path='../practice1/video/Laboratory_raw.avi')
+        vid = Video(path='../opencv-samples-data/vtest.avi')
 
         print(len(vid.frames))
 
@@ -38,6 +36,8 @@ class MyTestCase(unittest.TestCase):
         测试背景拆分- 背景生成
         :return:
         """
+
+        from practice1.vio_ import BackSub
         from practice1.vio_ import Video
 
         vid = Video(path='../practice1/video/Laboratory_raw.avi')
@@ -53,8 +53,6 @@ class MyTestCase(unittest.TestCase):
         import pickle
         pickle.dump(D, F)
         F.close()
-
-
 
 
 if __name__ == '__main__':
