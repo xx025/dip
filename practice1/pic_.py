@@ -1,4 +1,4 @@
-
+import random
 from copy import copy
 
 import matplotlib
@@ -37,15 +37,15 @@ class IMGU:
         return img
 
     @staticmethod
-    def fx(self):
+    def fx(img):
         """
         灰度图片进行反相
         """
-        return 255 - self.img
+        return 255 - img
 
     @staticmethod
     def noise(img, sigma=5, N=10):
-        import random
+
         """
         :param img: 原始图像，
         :param sigma: 随机数范围，可理解为强度
