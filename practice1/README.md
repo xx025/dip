@@ -34,22 +34,27 @@ def zft(img, draw=False):
 
 ```python
     def test_f1(self):
-        img = cv2.imread('../practice1/imgs/img21.png', cv2.IMREAD_GRAYSCALE)
-        IMGU.zft(img,draw=True)
-        cv2.imshow('img',img)
+        """
+        灰度图像的直方图计算和显示
+        :return:
+        """
+        import cv2
+        from practice1.pic_ import IMGU
+
+        img = cv2.imread('../opencv-samples-data/left01.jpg', cv2.IMREAD_GRAYSCALE)
+
+        IMGU.zft(img, draw=True)
+        cv2.imshow('img', img)
         cv2.waitKey()
 ```
 
 原图：
 
-![image-20221008193540408](C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008193540408.png)
+![](../opencv-samples-data/left01.jpg)
 
 直方图：
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008193312382.png" alt="image-20221008193312382" style="zoom:67%;" />
-
-
-
+![](imgs/直方图.png)
 ###  (2)灰度图像的负像，256级灰度像的16级灰度转换；
 
 #### 负像
@@ -68,18 +73,20 @@ def covert_to_16(img):
 测试：
 
 ```python
-def test_f2(self):
-    # 灰度图像的负像，
-    img = cv2.imread('../practice1/imgs/img21.png', cv2.IMREAD_GRAYSCALE)
-    a4 = IMGU.fx(img)
-    cv2.imshow('res', a4)
-    cv2.waitKey()
+    def test_f2(self):
+        # 灰度图像的负像，
+        import cv2
+        from practice1.pic_ import IMGU
+
+        img = cv2.imread('../opencv-samples-data/left01.jpg', cv2.IMREAD_GRAYSCALE)
+        a4 = IMGU.fx(img)
+        cv2.imshow('res', a4)
+        cv2.waitKey()
 ```
 
 负相图：
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008194104720.png" alt="image-20221008194104720" style="zoom:50%;" />
-
+![](imgs/负像图.png)
 #### 16级灰度转换
 
 实现方法
@@ -106,7 +113,7 @@ def test_f3(self):
 
 16级灰度图
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008194542515.png" alt="image-20221008194542515" style="zoom:50%;" />
+![](imgs/16级灰度图.png)
 
 ### (3)灰度图像随机增加不同参数的高斯噪声（零均值），采用图像相加的方法进行去噪；
 
@@ -148,7 +155,7 @@ def test_f4(self):
 
 一张施加噪声后的图
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008195411591.png" alt="image-20221008195411591" style="zoom:50%;" />
+![](imgs/噪声图.png)
 
 #### 对带有噪声的多张图像求均值
 
@@ -189,7 +196,7 @@ def test_f4(self):
 
 相加去噪后的图：
 
-<img src="C:\Users\sun\AppData\Roaming\Typora\typora-user-images\image-20221008195841324.png" alt="image-20221008195841324" style="zoom:50%;" />
+![](imgs/噪声平均.png)
 
 
 
