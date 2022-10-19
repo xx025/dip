@@ -9,7 +9,7 @@ from cv2 import ROTATE_180
 
 img = cv.imread('imgs/image.png')
 
-height, width = img.shape[:2]
+height, width = img.img_shape[:2]
 
 # 缩放
 res_zoom = cv.resize(src=img, dsize=(int(0.5 * width), int(0.5 * height)))
