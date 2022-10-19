@@ -6,7 +6,7 @@ class Video:
     def __init__(self, path):
         self.video = cv2.VideoCapture(path)  # 视频对象
         self.frames = self.__all_frames()  # 所有帧
-        self.height, self.width, self.RGB3 = self.frames[0].shape  # 高度和宽度
+        self.height, self.width, self.RGB3 = self.frames[0].img_shape  # 高度和宽度
         self.lens = len(self.frames)  # 帧数
 
     def __all_frames(self):
