@@ -21,7 +21,9 @@ def homomorphic_filter(src, d0=2, r1=1.0, rh=2.0, c=4, h=2.0, l=0.5):
 
     # 对数域
     gray = np.log(gray + 1.0)
-    gray = gray / np.log(256)  # 归一化
+    gray = gray / np.log(256)
+
+    # 归一化
     print(gray.max(), gray.min())
 
     # 傅里叶变换
