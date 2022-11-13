@@ -42,9 +42,24 @@ def spectrum(img):
     """
 
     dft = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)
+
+    # cv2.dft(原始图像，转换标识)
+    # 这里的原始图像必须是np.float32格式。
+    # 所以，首先需要使用cv2.float32()函数将图像转换。
+    # 而转换标识的值通常为cv2.DFT_COMPLEX_OUTPUT，
+    # 用来输出一个复数阵列。
+
     dft_shift = np.fft.fftshift(dft)
+    # 经过cv2.dft()函数的变换后，会得到原始图像的频谱信息。
+    # 此时零分量与Numpy库实现一样都不在中心位置。这里还是
+    # 需要使用numpy.fft.fftshift()函数将其移动到中间位置。
 
     dft_amp = cv2.magnitude(dft_shift[:, :, 0], dft_shift[:, :, 1])
+
+    # 需要特别注意的是，函数cv2.dft()返回值是双通道的，第1个通道是结果的实数部分，
+    # 第2个通道是结果的虚数部分。使用numpy.fft.fftshift()函数处理后，频谱图像
+    # 还只是一个由实部和虚部构成的值，要显示出来，
+    # 要使用到另一个函数cv2.magnitude()。
 
     dft_amp_log = np.log(1.0 + dft_amp)
     # 幅度谱对数变换，以便于显示
@@ -54,13 +69,13 @@ def spectrum(img):
     return dft_amp_norm, dft_amp
 
 
-def butterworthNRFilter(img, radius=15, uk=25, vk=16, n=3):
+def butterworth_filter(img, radius=15, uk=25, vk=16, n=3):
     """
     巴特沃斯陷波带阻滤波器
     https://blog.csdn.net/youcans/article/details/122839594
 
-    :param img:
-    :param radius:
+    :param img: 原始图像
+    :param radius: 半径
     :param uk:
     :param vk:
     :param n:
@@ -69,6 +84,11 @@ def butterworthNRFilter(img, radius=15, uk=25, vk=16, n=3):
 
     M, N = img.shape[1], img.shape[0]
     u, v = np.meshgrid(np.arange(M), np.arange(N))
+    # meshgrid 函数用来生成网格矩阵，可以是二维网格矩阵。
+    # exp1_1:生成二维网格，用法为：[x y]=meshgrid(a b);
+    # % a 和b是一维数组，如a=[1 2 3]; b= [2 3 4];
+    # 则生成的 X 和 Y 都是为 3X3 维的矩阵，
+
     Dm = np.sqrt((u - M // 2 - uk) ** 2 + (v - N // 2 - vk) ** 2)
     Dp = np.sqrt((u - M // 2 + uk) ** 2 + (v - N // 2 + vk) ** 2)
     D0 = radius
@@ -99,9 +119,11 @@ def img_filter(img, dft_amp, BRFilter):
     f_image = img_float32 * mask  # f(x,y) * (-1)^(x+y)
 
     # (3) 快速傅里叶变换
-    r_padded = cv2.getOptimalDFTSize(rows)  # 最优 DFT 扩充尺寸
-    c_padded = cv2.getOptimalDFTSize(cols)  # 用于快速傅里叶变换
-    dft_image = np.zeros((r_padded, c_padded, 2), np.float32)  # 对原始图像进行边缘扩充
+    r_padded = cv2.getOptimalDFTSize(rows)
+    c_padded = cv2.getOptimalDFTSize(cols)
+    # 最优 DFT 扩充尺寸用于快速傅里叶变换
+    dft_image = np.zeros((r_padded, c_padded, 2), np.float32)
+    # 对原始图像进行边缘扩充
     dft_image[:rows, :cols, 0] = f_image  # 边缘扩充，下侧和右侧补0
     cv2.dft(dft_image, dft_image, cv2.DFT_COMPLEX_OUTPUT)  # 快速傅里叶变换
 
@@ -121,7 +143,8 @@ def img_filter(img, dft_amp, BRFilter):
     idft_cen = idft * mask2  # g(x,y) * (-1)^(x+y)
 
     # (8) 截取左上角，大小和输入图像相等
-    idft_cen_clip = np.clip(idft_cen, 0, 255)  # 截断函数，将数值限制在 [0,255]
+    idft_cen_clip = np.clip(idft_cen, 0, 255)
+    # 截断函数，将数值限制在 [0,255]
     img_filtered = idft_cen_clip.astype(np.uint8)
     img_filtered = img_filtered[:rows, :cols]
 
