@@ -1,6 +1,6 @@
 import cv2 as cv
 
-from practice4.p0401 import sin_noise, spectrum, butterworthNRFilter, img_filter
+from practice4.p0401 import sin_noise, spectrum, butterworth_filter, img_filter
 from pylot_imgshow import img_show
 
 img = cv.imread(r'p0401/data/lena.jpg', cv.IMREAD_GRAYSCALE)
@@ -12,7 +12,7 @@ noise_img = sin_noise(img)
 dftAmpNorm, df_amp = spectrum(noise_img)
 # 频谱图
 
-BRFilter = butterworthNRFilter(noise_img)
+BRFilter = butterworth_filter(noise_img)
 # 巴特沃斯陷波带阻滤波器
 
 filter_img = img_filter(noise_img, df_amp, BRFilter)
