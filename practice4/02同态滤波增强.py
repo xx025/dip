@@ -12,6 +12,5 @@ img = cv2.imread(r'p0402/data/lena_light.jpg', 0)
 
 filter_img = homomorphic_filter(img, r1=0.2, rh=1.5)
 # 将图片执行同态滤波器
-
-img_show(('Original image', img),
-         ("Filter image", filter_img))
+imgs = [('Original image', img), ("Filter image", filter_img)]
+img_show(imgs, sp="2#1")

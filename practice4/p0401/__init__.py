@@ -1,16 +1,16 @@
 import cv2
 import numpy as np
 
-print("""
-
-参考学习：
-
-陷波滤波器——周期性降噪    https://blog.csdn.net/jaxonchan/article/details/118913575
-MATLAB--数字图像处理 添加周期噪声   https://blog.csdn.net/weixin_44225182/article/details/102484553
-python图片傅立叶频谱图分析    https://blog.csdn.net/seasermy/article/details/102736863
-陷波带阻滤波器消除周期噪声干扰    https://blog.csdn.net/youcans/article/details/122839594
-
-""")
+# print("""
+#
+# 参考学习：
+#
+# 陷波滤波器——周期性降噪    https://blog.csdn.net/jaxonchan/article/details/118913575
+# MATLAB--数字图像处理 添加周期噪声   https://blog.csdn.net/weixin_44225182/article/details/102484553
+# python图片傅立叶频谱图分析    https://blog.csdn.net/seasermy/article/details/102736863
+# 陷波带阻滤波器消除周期噪声干扰    https://blog.csdn.net/youcans/article/details/122839594
+#
+# """)
 
 
 def sin_noise(img_grey, A=40, u0=50, v0=50):
@@ -76,9 +76,9 @@ def butterworth_filter(img, radius=15, uk=25, vk=16, n=3):
 
     :param img: 原始图像
     :param radius: 半径
-    :param uk:
-    :param vk:
-    :param n:
+    :param uk: 滤波器距离参数
+    :param vk: 滤波器距离参数
+    :param n: 陷波对数
     :return:
     """
 
@@ -97,15 +97,15 @@ def butterworth_filter(img, radius=15, uk=25, vk=16, n=3):
     return kernel
 
 
-def img_filter(img, dft_amp, BRFilter):
+def img_filter(img, dft_amp_, BRFilter_):
     """
      陷波带阻滤波器消除周期噪声干扰
     https://blog.csdn.net/youcans/article/details/122839594
 
 
     :param img:
-    :param dft_amp:
-    :param BRFilter:
+    :param dft_amp_: 频谱
+    :param BRFilter_: 滤波器
     :return:
     """
 
@@ -130,14 +130,14 @@ def img_filter(img, dft_amp, BRFilter):
     # (5) 在频率域修改傅里叶变换: 傅里叶变换 点乘 陷波带阻滤波器
     dft_filter = np.zeros(dft_image.shape, dft_image.dtype)  # 快速傅里叶变换的尺寸(优化尺寸)
     for i in range(2):
-        dft_filter[:r_padded, :c_padded, i] = dft_image[:r_padded, :c_padded, i] * BRFilter
+        dft_filter[:r_padded, :c_padded, i] = dft_image[:r_padded, :c_padded, i] * BRFilter_
 
     # (6) 对频域滤波傅里叶变换 执行傅里叶逆变换，并只取实部
-    idft = np.zeros(dft_amp.shape, np.float32)  # 快速傅里叶变换的尺寸(优化尺寸)
+    idft = np.zeros(dft_amp_.shape, np.float32)  # 快速傅里叶变换的尺寸(优化尺寸)
     cv2.dft(dft_filter, idft, cv2.DFT_REAL_OUTPUT + cv2.DFT_INVERSE + cv2.DFT_SCALE)
 
     # (7) 中心化, centralized 2d array g(x,y) * (-1)^(x+y)
-    mask2 = np.ones(dft_amp.shape)
+    mask2 = np.ones(dft_amp_.shape)
     mask2[1::2, ::2] = -1
     mask2[::2, 1::2] = -1
     idft_cen = idft * mask2  # g(x,y) * (-1)^(x+y)
